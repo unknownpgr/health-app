@@ -3,9 +3,9 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <solid
-        android:color="#ffffff" />
+        android:color="@color/white" />
     <stroke
         android:width="5dp"
-        android:color="#dd000000" />
+        android:color="@color/app_background" />
 
 </shape>

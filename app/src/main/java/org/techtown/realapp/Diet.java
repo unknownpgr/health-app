@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 public class Diet extends AppCompatActivity {
     ArrayList<Ex> exercise = new ArrayList<Ex>();
+    SaveExercise saveRead = new SaveExercise();
 
     private RecyclerView mRecylcerView;
     private RecyclerView.Adapter mAdapter;
@@ -34,13 +36,29 @@ public class Diet extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecylcerView.setLayoutManager(mLayoutManager);
 
+        Intent intent = getIntent();
+        int requestCode = intent.getExtras().getInt("requestCode");
+
         myDataset = new ArrayList<>();
-        mAdapter = new DietAdapter(myDataset, this);
+        mAdapter = new DietAdapter(myDataset, this, requestCode);
         mRecylcerView.setAdapter(mAdapter);
 
-        exercise = ReadExerciseData();
+        switch (requestCode){
+            case 1111:
+                exercise = saveRead.ReadExerciseData(getApplicationContext(), Constants.EX_SHP_KEY_day1);
+                break;
+            case 2222:
+                exercise = saveRead.ReadExerciseData(getApplicationContext(), Constants.EX_SHP_KEY_day2);
+                break;
+            case 3333:
+                exercise = saveRead.ReadExerciseData(getApplicationContext(), Constants.EX_SHP_KEY_day3);
+                break;
+            case 4444:
+                exercise = saveRead.ReadExerciseData(getApplicationContext(), Constants.EX_SHP_KEY_day4);
+                break;
+        }
 
-        for(int i=Constants.EX_UPPER_START; i<Constants.EX_LOWER_START; i++){
+        for(int i = Constants.EX_DIET_START; i<Constants.EX_CORE_START; i++){
             myDataset.add(new DietAdapter.MyData(exercise.get(i).getName(), false));
         }
 
@@ -52,24 +70,5 @@ public class Diet extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void SaveExerciseData(ArrayList<Ex> exercise){
-        SharedPreferences preferences = getSharedPreferences(Constants.EX_SHP_KEY, MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(exercise);
-        editor.putString(Constants.EX_SHP_DATA_KEY, json);
-        editor.commit();
-    }
-
-    private ArrayList<Ex> ReadExerciseData() {
-        SharedPreferences sharedpref = getSharedPreferences(Constants.EX_SHP_KEY, MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedpref.getString(Constants.EX_SHP_DATA_KEY, "");
-        Type type = new TypeToken<ArrayList<Ex>>(){}.getType();
-        ArrayList<Ex> arrayList = gson.fromJson(json, type);
-
-        return arrayList;
     }
 }

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#dd000000">
+    android:background="@color/app_background">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -37,8 +37,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
-                    android:text="첫째 날"
-                    android:textColor="#ffffff" />
+                    android:text="@string/FirstDay"
+                    android:textColor="@color/white"
+                    android:scrollbars="vertical"/>
 
                 <TextView
                     android:id="@+id/textview_day1"
@@ -54,8 +55,8 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/day_button_style"
-                    android:text="운동 추가하기"
-                    android:textColor="#ffffff" />
+                    android:text="@string/AddExercise"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
             <LinearLayout
@@ -70,15 +71,16 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
-                    android:text="둘째 날"
-                    android:textColor="#ffffff" />
+                    android:text="@string/SecondDay"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/textview_day2"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:background="@drawable/day_textview_style"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:scrollbars="vertical"/>
 
                 <Button
                     android:id="@+id/btn_day2"
@@ -87,8 +89,8 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/day_button_style"
-                    android:text="운동 추가하기"
-                    android:textColor="#ffffff" />
+                    android:text="@string/AddExercise"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
         </LinearLayout>
@@ -110,15 +112,17 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
-                    android:text="셋째 날"
-                    android:textColor="#ffffff" />
+                    android:text="@string/ThirdDay"
+                    android:textColor="@color/white"
+                    android:scrollbars="vertical"/>
 
                 <TextView
                     android:id="@+id/textview_day3"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:background="@drawable/day_textview_style"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:scrollbars="vertical"/>
 
                 <Button
                     android:id="@+id/btn_day3"
@@ -127,8 +131,8 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/day_button_style"
-                    android:text="운동 추가하기"
-                    android:textColor="#ffffff" />
+                    android:text="@string/AddExercise"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
             <LinearLayout
@@ -143,8 +147,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
-                    android:text="넷째 날"
-                    android:textColor="#ffffff" />
+                    android:text="@string/FourthDay"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/textview_day4"
@@ -160,8 +164,8 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/day_button_style"
-                    android:text="운동 추가하기"
-                    android:textColor="#ffffff" />
+                    android:text="@string/AddExercise"
+                    android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
         <Button
@@ -169,6 +173,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="완료" />
+            android:text="@string/Complete" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

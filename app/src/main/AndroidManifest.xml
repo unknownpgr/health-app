@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.techtown.realapp">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:fullBackupContent="false"
@@ -10,6 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id"/>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,15 +26,20 @@
         </activity>
 
         <activity android:name=".Routine"/>
-        <activity android:name=".Routine_1"/>
+        <activity android:name=".RoutinePeriod"/>
         <activity android:name=".Lower"/>
         <activity android:name=".Upper"/>
         <activity android:name=".Diet"/>
         <activity android:name=".Core"/>
         <activity android:name=".RoutineNumber"/>
-        <activity android:name=".MyActivity"/>
+        <activity android:name=".ExkindSel"/>
         <activity android:name=".TodayExercise"/>
         <activity android:name=".TodayEx"/>
-        <activity android:name=".ExerciseKind"/>
+        <activity android:name=".ExPropertyCard"/>
+        <activity android:name=".MyRoutine"/>
+        <activity android:name=".SetIntensity"/>
+        <activity android:name=".StartEx"/>
+        <activity android:name=".EndEx"/>
+        <activity android:name=".Rest" android:theme="@android:style/Theme.Dialog" />
     </application>
 </manifest>

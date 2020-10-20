@@ -23,7 +23,10 @@ public class LowerAdapter extends RecyclerView.Adapter<LowerAdapter.ViewHolder> 
 
     private ArrayList<MyData> mDataSet;
     private ArrayList<Ex> exercise;
-    private Context mcontext;
+    SaveExercise saveRead = new SaveExercise();
+    private Context mContext;
+    private int requestCode;
+    String key_save;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTextView;
@@ -36,21 +39,39 @@ public class LowerAdapter extends RecyclerView.Adapter<LowerAdapter.ViewHolder> 
         }
     }
 
-    public LowerAdapter(ArrayList<MyData> myDataset, Context mcontext) {
+    public LowerAdapter(ArrayList<MyData> myDataset, Context mcontext, int requestCode) {
         mDataSet = myDataset;
-        this.mcontext = mcontext;
+        this.mContext = mcontext;
+        this.requestCode = requestCode;
     }
 
     @Override
     public LowerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercisekind, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ex_property_card, parent, false);
 
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        exercise = ReadExerciseData();
+        switch(requestCode){
+            case 1111:
+                exercise = saveRead.ReadExerciseData(mContext, Constants.EX_SHP_KEY_day1);
+                key_save = Constants.EX_SHP_KEY_day1;
+                break;
+            case 2222:
+                exercise = saveRead.ReadExerciseData(mContext, Constants.EX_SHP_KEY_day2);
+                key_save = Constants.EX_SHP_KEY_day2;
+                break;
+            case 3333:
+                exercise = saveRead.ReadExerciseData(mContext, Constants.EX_SHP_KEY_day3);
+                key_save = Constants.EX_SHP_KEY_day3;
+                break;
+            case 4444:
+                exercise = saveRead.ReadExerciseData(mContext, Constants.EX_SHP_KEY_day4);
+                key_save = Constants.EX_SHP_KEY_day4;
+                break;
+        }
         if(exercise.get(position + Constants.EX_LOWER_START).getChoosed() ==1){
             mDataSet.get(position).setSelected(true);
         }
@@ -59,6 +80,8 @@ public class LowerAdapter extends RecyclerView.Adapter<LowerAdapter.ViewHolder> 
         holder.cbSelect.setChecked(mDataSet.get(position).isSelected());
         holder.cbSelect.setVisibility(View.VISIBLE);
         holder.cbSelect.setOnCheckedChangeListener(null);
+
+
 
         holder.cbSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -69,7 +92,7 @@ public class LowerAdapter extends RecyclerView.Adapter<LowerAdapter.ViewHolder> 
                 }else{
                     exercise.get(position + Constants.EX_LOWER_START).unchoice();
                 }
-                SaveExerciseData(exercise);
+                saveRead.SaveExerciseData(mContext, exercise, key_save);
             }
         });
     }
@@ -94,24 +117,5 @@ public class LowerAdapter extends RecyclerView.Adapter<LowerAdapter.ViewHolder> 
         public void setSelected(boolean selected) {
             isSelected = selected;
         }
-    }
-
-    private void SaveExerciseData(ArrayList<Ex> exercise){
-        SharedPreferences prefForEx = mcontext.getSharedPreferences(Constants.EX_SHP_KEY, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefForEx.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(exercise);
-        editor.putString(Constants.EX_SHP_DATA_KEY, json);
-        editor.commit();
-    }
-
-    private ArrayList<Ex> ReadExerciseData() {
-        SharedPreferences prefForEx = mcontext.getSharedPreferences(Constants.EX_SHP_KEY, MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = prefForEx.getString(Constants.EX_SHP_DATA_KEY, "");
-        Type type = new TypeToken<ArrayList<Ex>>(){}.getType();
-        ArrayList<Ex> arrayList = gson.fromJson(json, type);
-
-        return arrayList;
     }
 }

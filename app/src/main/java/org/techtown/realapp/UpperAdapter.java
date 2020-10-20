@@ -2,7 +2,6 @@ package org.techtown.realapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,9 @@ public class UpperAdapter extends RecyclerView.Adapter<UpperAdapter.ViewHolder> 
     private ArrayList<MyData> mDataSet;
     private ArrayList<Ex> exercise = null;
     private Context mContext;
+    private int requestCode;
+    String key_save;
+    SaveExercise saveRead = new SaveExercise();
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTextView;
@@ -34,30 +36,43 @@ public class UpperAdapter extends RecyclerView.Adapter<UpperAdapter.ViewHolder> 
             super(view);
             mTextView = view.findViewById(R.id.textView);
             cbSelect = view.findViewById(R.id.check_exercise);
-//            SharedPreferences sharedPreferences1 = view.getContext().getSharedPreferences("pref", MODE_PRIVATE);
-//
-//            //Creating editor to store values to shared preferences
-//            SharedPreferences.Editor editor = sharedPreferences1.edit();
-//            editor.putBoolean("check", cbSelect.isChecked());
-//            editor.apply();
         }
     }
 
-    public UpperAdapter(ArrayList<MyData> myDataSet, Context mContext) {
+    public UpperAdapter(ArrayList<MyData> myDataSet, Context mContext, int requestCode) {
         mDataSet = myDataSet;
         this.mContext = mContext;
+        this.requestCode = requestCode;
     }
 
     @Override
     public UpperAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercisekind, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ex_property_card, parent, false);
 
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        exercise = ReadExerciseData();
+        switch(requestCode){
+            case 1111:
+                exercise = saveRead.ReadExerciseData(mContext, Constants.EX_SHP_KEY_day1);
+                key_save = Constants.EX_SHP_KEY_day1;
+                break;
+            case 2222:
+                exercise = saveRead.ReadExerciseData(mContext, Constants.EX_SHP_KEY_day2);
+                key_save = Constants.EX_SHP_KEY_day2;
+                break;
+            case 3333:
+                exercise = saveRead.ReadExerciseData(mContext, Constants.EX_SHP_KEY_day3);
+                key_save = Constants.EX_SHP_KEY_day3;
+                break;
+            case 4444:
+                exercise = saveRead.ReadExerciseData(mContext, Constants.EX_SHP_KEY_day4);
+                key_save = Constants.EX_SHP_KEY_day4;
+                break;
+        }
+
         if(exercise.get(position + Constants.EX_UPPER_START).getChoosed() ==1){
             mDataSet.get(position).setSelected(true);
         }
@@ -74,9 +89,9 @@ public class UpperAdapter extends RecyclerView.Adapter<UpperAdapter.ViewHolder> 
                 if (mDataSet.get(position).isSelected) {
                     exercise.get(position + Constants.EX_UPPER_START).choice();
                 } else {
-                    exercise.get(position + + Constants.EX_UPPER_START).unchoice();
+                    exercise.get(position + Constants.EX_UPPER_START).unchoice();
                 }
-                SaveExerciseData(exercise);
+                saveRead.SaveExerciseData(mContext, exercise, key_save);
             }
         });
     }
@@ -103,22 +118,5 @@ public class UpperAdapter extends RecyclerView.Adapter<UpperAdapter.ViewHolder> 
         }
     }
 
-    private void SaveExerciseData(ArrayList<Ex> exercise){
-        SharedPreferences prefForEx = mContext.getSharedPreferences(Constants.EX_SHP_KEY, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefForEx.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(exercise);
-        editor.putString(Constants.EX_SHP_DATA_KEY, json);
-        editor.commit();
-    }
 
-    private ArrayList<Ex> ReadExerciseData() {
-        SharedPreferences prefForEx = mContext.getSharedPreferences(Constants.EX_SHP_KEY, MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = prefForEx.getString(Constants.EX_SHP_DATA_KEY, "");
-        Type type = new TypeToken<ArrayList<Ex>>(){}.getType();
-        ArrayList<Ex> arrayList = gson.fromJson(json, type);
-
-        return arrayList;
-    }
 }

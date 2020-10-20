@@ -7,23 +7,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class Upper extends AppCompatActivity {
     ArrayList<Ex> exercise = new ArrayList<Ex>();
+    SaveExercise saveRead = new SaveExercise();
 
     private RecyclerView mRecylcerView;
     private RecyclerView.Adapter mAdapter;
@@ -32,7 +27,6 @@ public class Upper extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upper);
         mRecylcerView = (RecyclerView) findViewById(R.id.upper_recycler);
@@ -42,13 +36,29 @@ public class Upper extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecylcerView.setLayoutManager(mLayoutManager);
 
+        Intent intent = getIntent();
+        int requestCode = intent.getExtras().getInt("requestCode");
+
         myDataset = new ArrayList<>();
-        mAdapter = new UpperAdapter(myDataset, this);
+        mAdapter = new UpperAdapter(myDataset, this, requestCode);
         mRecylcerView.setAdapter(mAdapter);
 
-        exercise = ReadExerciseData();
+        switch (requestCode){
+            case 1111:
+                exercise = saveRead.ReadExerciseData(getApplicationContext(), Constants.EX_SHP_KEY_day1);
+                break;
+            case 2222:
+                exercise = saveRead.ReadExerciseData(getApplicationContext(), Constants.EX_SHP_KEY_day2);
+                break;
+            case 3333:
+                exercise = saveRead.ReadExerciseData(getApplicationContext(), Constants.EX_SHP_KEY_day3);
+                break;
+            case 4444:
+                exercise = saveRead.ReadExerciseData(getApplicationContext(), Constants.EX_SHP_KEY_day4);
+                break;
+        }
 
-        for(int i=Constants.EX_UPPER_START; i<Constants.EX_LOWER_START; i++){
+        for(int i = Constants.EX_UPPER_START; i<Constants.EX_LOWER_START; i++){
             myDataset.add(new UpperAdapter.MyData(exercise.get(i).getName(), false));
         }
 
@@ -60,24 +70,5 @@ public class Upper extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void SaveExerciseData(ArrayList<Ex> exercise){
-        SharedPreferences prefForEx = getSharedPreferences(Constants.EX_SHP_KEY, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefForEx.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(exercise);
-        editor.putString(Constants.EX_SHP_DATA_KEY, json);
-        editor.commit();
-    }
-
-    private ArrayList<Ex> ReadExerciseData() {
-        SharedPreferences prefForEx = getSharedPreferences(Constants.EX_SHP_KEY, MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = prefForEx.getString(Constants.EX_SHP_DATA_KEY, "");
-        Type type = new TypeToken<ArrayList<Ex>>(){}.getType();
-        ArrayList<Ex> arrayList = gson.fromJson(json, type);
-
-        return arrayList;
     }
 }
